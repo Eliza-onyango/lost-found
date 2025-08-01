@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Item | Lost & Found Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+      <!-- Back button -->
+      <div class="mb-6">
+        <a
+          href="{% url 'home' %}"
+          class="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition"
+        >
+          <i class="fas fa-arrow-left mr-2"></i> Back to Home
+        </a>
+      </div>
+
+      <!-- Form Card -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="bg-indigo-700 px-6 py-4">
+          <h2 class="text-2xl font-bold text-white">
+            <i class="fas fa-plus-circle mr-2"></i> Post a Lost or Found Item
+          </h2>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+          {% csrf_token %}
+
+          <!-- Styled form fields -->
+          <div class="space-y-4">
+            {% for field in form %}
+            <div class="space-y-2">
+              <label
+                for="{{ field.id_for_label }}"
+                class="block text-sm font-medium text-gray-700"
+              >
+                {{ field.label }} {% if field.field.required %}
+                <span class="text-red-500">*</span>
+                {% endif %}
+              </label>
+
+              {% if field.name == 'image' %}
+              <!-- Custom file input styling -->
+              <div class="mt-1 flex items-center">
+                <label
+                  class="flex flex-col items-center px-4 py-6 bg-white rounded-lg border border-dashed border-gray-300 cursor-pointer hover:bg-gray-50"
+                >
+                  <i class="fas fa-camera text-3xl text-indigo-500 mb-2"></i>
+                  <span class="text-sm text-gray-600">
+                    {% if field.value %} Change image ({{ field.value.name }})
+                    {% else %} Upload an image {% endif %}
+                  </span>
+                  {{ field }}
+                </label>
+              </div>
+              {% else %} {{ field }} {% endif %} {% if field.help_text %}
+              <p class="text-xs text-gray-500">{{ field.help_text }}</p>
+              {% endif %} {% for error in field.errors %}
+              <p class="text-xs text-red-500">{{ error }}</p>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-4">
+            <button
+              type="submit"
+              class="w-full flex justify-center items-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg"
+            >
+              <i class="fas fa-paper-plane mr-2"></i> Post Item
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tips Section -->
+      <div class="mt-8 bg-indigo-50 rounded-lg p-6 border border-indigo-100">
+        <h3 class="text-lg font-medium text-indigo-800 mb-3 flex items-center">
+          <i class="fas fa-lightbulb mr-2"></i> Posting Tips
+        </h3>
+        <ul class="space-y-2 text-indigo-700">
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-indigo-500 mt-1 mr-2"></i>
+            <span>Be specific about the item and location</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-indigo-500 mt-1 mr-2"></i>
+            <span>Include clear photos if possible</span>
+          </li>
+          <li class="flex items-start">
+            <i class="fas fa-check-circle text-indigo-500 mt-1 mr-2"></i>
+            <span>Provide contact information where you can be reached</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Add some basic styling to form elements -->
+    <style>
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      textarea,
+      select {
+        @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-300 focus:border-transparent shadow-sm;
+      }
+
+      input[type="file"] {
+        @apply hidden;
+      }
+
+      /* Style select dropdown arrow */
+      select {
+        @apply pr-10 bg-white bg-[url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")] bg-no-repeat bg-[length:1.5rem] bg-[center_right_0.5rem];
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+    </style>
+  </body>
+</html>
